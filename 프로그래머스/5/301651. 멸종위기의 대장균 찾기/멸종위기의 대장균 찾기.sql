@@ -1,0 +1,32 @@
+WITH RECURSIVE TT AS (
+    SELECT ID
+         , PARENT_ID
+         , 1 AS LEVEL
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+    UNION ALL
+    SELECT A.ID 
+         , A.PARENT_ID
+         , 1 + LEVEL AS LEVEL
+     FROM ECOLI_DATA A
+    INNER JOIN TT
+       ON TT.ID = A.PARENT_ID
+)
+SELECT COUNT(1) AS COUNT
+     , A.LEVEL AS GENERATION
+  FROM TT A
+ LEFT OUTER JOIN (
+       SELECT MAX(ID) AS ID
+            , PARENT_ID 
+            , COUNT(1) AS COUNT
+        FROM ECOLI_DATA 
+      GROUP BY PARENT_ID
+       ) B
+     ON A.ID = B.PARENT_ID
+    WHERE B.COUNT IS NULL
+  GROUP BY A.LEVEL
+ 
+
+
+  
+  
