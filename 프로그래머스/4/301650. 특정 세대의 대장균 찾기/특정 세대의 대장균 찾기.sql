@@ -1,0 +1,17 @@
+WITH RECURSIVE TREE AS (
+    SELECT PARENT_ID
+         , ID
+         , 1 AS NUM
+      FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+ UNION ALL
+     SELECT A.PARENT_ID
+       , A.ID
+       , B.NUM + 1
+      FROM ECOLI_DATA A
+         , TREE B
+       WHERE A.PARENT_ID = B.ID
+)
+SELECT A.ID
+  FROM TREE A
+  WHERE A.NUM = 3
