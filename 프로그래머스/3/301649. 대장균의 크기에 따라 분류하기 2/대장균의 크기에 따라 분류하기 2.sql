@@ -1,0 +1,24 @@
+WITH CNT AS (
+    SELECT COUNT(1) / 4 AS NUM
+      FROM ECOLI_DATA
+)
+SELECT X.ID
+    , CASE WHEN COR  = 1 THEN 'CRITICAL'
+           WHEN COR = 2 THEN  'HIGH'
+           WHEN COR = 3 THEN 'MEDIUM'
+           WHEN COR = 4 THEN 'LOW'
+           END AS COLONY_NAME
+  FROM (
+SELECT A.ID
+     , A.SIZE_OF_COLONY
+     , A.MY_NUM
+     , CEIL(A.MY_NUM / B.NUM) AS COR
+  FROM (
+    SELECT ID
+         , SIZE_OF_COLONY
+         , ROW_NUMBER() OVER (ORDER BY SIZE_OF_COLONY DESC) AS MY_NUM
+      FROM ECOLI_DATA
+      ) A
+      , CNT B
+      ) X
+      ORDER BY X.ID
