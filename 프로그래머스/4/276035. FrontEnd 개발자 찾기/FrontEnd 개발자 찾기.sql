@@ -1,0 +1,22 @@
+
+SELECT X.ID
+     , MAX(X.EMAIL) AS EMAIL
+     , MAX(X.FIRST_NAME) AS FIRST_NAME
+     , MAX(X.LAST_NAME) AS LAST_NAME
+  FROM (
+SELECT A.ID
+     , A.EMAIL
+     , A.FIRST_NAME
+     , A.LAST_NAME
+     , B.NAME
+     , B.CATEGORY
+     , CASE WHEN A.SKILL_CODE & B.CODE = B.CODE THEN '2'
+            ELSE '1'
+        END AS INCLUDE
+  FROM DEVELOPERS A
+     , SKILLCODES B
+      ) X
+     WHERE X.CATEGORY = 'Front End'
+       AND X.INCLUDE = '2'
+     GROUP BY X.ID
+     ORDER BY X.ID
