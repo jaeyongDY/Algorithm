@@ -1,0 +1,3 @@
+select COUNT(1) AS FISH_COUNT
+  from FISH_INFO 
+ where LENGTH IS NULL
