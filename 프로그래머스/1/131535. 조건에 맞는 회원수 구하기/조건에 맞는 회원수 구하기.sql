@@ -1,0 +1,6 @@
+select COUNT(1) AS USERS
+  from USER_INFO 
+ where YEAR(JOINED) = '2021'
+   AND AGE BETWEEN 20 AND 29
+  
+  
